@@ -1,0 +1,169 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 96px;
+  }
+
+  body {
+    @apply bg-night text-ink font-body font-semibold leading-relaxed overflow-x-hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display font-bold;
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+  }
+
+  :focus-visible {
+    @apply outline outline-[3px] outline-ink outline-offset-2 rounded-md;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  /* Lenis smooth-scroll guards (per lenis docs): disable native CSS
+     smooth-scroll while Lenis drives the scroll to avoid double-easing */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+}
+
+@layer components {
+  .wrap {
+    @apply max-w-wrap mx-auto px-5 md:px-10 lg:px-[60px];
+  }
+
+  /* signature sticker card */
+  .card {
+    @apply bg-night-soft border-2 border-ink rounded-sticker;
+  }
+
+  .btn {
+    @apply inline-block rounded-full border-2 border-ink px-7 py-3.5 text-center font-display font-bold transition-[transform,box-shadow] duration-150;
+  }
+  .btn-ink {
+    @apply btn bg-ink text-night hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-pop-soft;
+  }
+  .btn-ghost {
+    @apply btn bg-transparent text-ink hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-pop;
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-2.5 font-display text-[0.82rem] font-bold uppercase tracking-[0.16em] text-ink mb-4;
+  }
+  .eyebrow::before {
+    content: "✦";
+    font-size: 0.95rem;
+  }
+
+  .section-title {
+    @apply text-[clamp(1.9rem,4.2vw,3.6rem)] mb-4;
+  }
+  .section-sub {
+    @apply text-khaki text-[clamp(1rem,1.4vw,1.15rem)] max-w-[680px] font-semibold;
+  }
+
+  /* soft marker-underline behind key phrases (wraps on small screens) */
+  .underline-pop {
+    @apply relative md:whitespace-nowrap;
+  }
+
+  /* select dropdown chevron (ink) */
+  .select-chevron {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23F6F1AC' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+  }
+
+  /* Ambient infinite loops run as CSS animations on the compositor thread —
+     framer-motion's rAF loop would cost main-thread style recalc every frame.
+     Interaction animation (reveals, hovers, exits) stays in Framer Motion. */
+  .anim-marquee {
+    animation: marquee-scroll 30s linear infinite;
+  }
+  .anim-twinkle {
+    animation: twinkle 3s ease-in-out infinite;
+  }
+  .anim-floaty {
+    animation: floaty 6s ease-in-out infinite;
+  }
+  @keyframes marquee-scroll {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  @keyframes twinkle {
+    0%,
+    100% {
+      opacity: 0.25;
+      transform: scale(0.85);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+  }
+  @keyframes floaty {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-14px);
+    }
+  }
+  .anim-bounce {
+    animation: bounce-down 1.6s ease-in-out infinite;
+  }
+  @keyframes bounce-down {
+    0%,
+    100% {
+      transform: translateY(0);
+      opacity: 0.65;
+    }
+    50% {
+      transform: translateY(10px);
+      opacity: 1;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .anim-marquee,
+    .anim-twinkle,
+    .anim-floaty,
+    .anim-bounce {
+      animation: none;
+    }
+    .anim-twinkle {
+      opacity: 0.6;
+    }
+  }
+  .underline-pop::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.06em;
+    height: 0.18em;
+    background: theme(colors.ink);
+    opacity: 0.14;
+    border-radius: 99px;
+    z-index: -1;
+  }
+}
